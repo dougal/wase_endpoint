@@ -47,7 +47,7 @@ That's it! I also included a basic sinatra server in 'server.rb' that can be use
 
 == Problems, Comments, Suggestions?
 
-Issues can be tracked on github: 
+Issues can be tracked on github: http://github.com/dougal/WaseEndpoint/issues
 
 All of the above are most welcome. mailto:dougal.s@gmail.com
 

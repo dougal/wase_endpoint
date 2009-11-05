@@ -5,6 +5,9 @@ class WaseEndpoint
       twitter_http_auth = Twitter::HTTPAuth.new(username, password)
       @twitter_client = Twitter::Base.new(twitter_http_auth)
       
+      # Call the test api method to validate the authentication.
+      @twitter_client.help
+      
       # The oldest message ID could be stored here, but since twitter IDs
       # aren't always time-linear, comparing the messages is safer.
       @all_messages = []

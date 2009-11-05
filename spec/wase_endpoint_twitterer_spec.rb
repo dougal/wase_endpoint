@@ -12,6 +12,16 @@ describe WaseEndpoint::Twitterer do
     WaseEndpoint::Twitterer.new(username, password)
   end
   
+  it "should validate the authentication with the help method" do
+    username ='foo'
+    password = 'bar'
+    Twitter::HTTPAuth.stub(:new)
+    Twitter::Base.stub(:new).and_return(mock_twitter_base)
+    mock_twitter_base.should_receive(:help)
+
+    @twitterer = WaseEndpoint::Twitterer.new(username, password)
+  end
+  
   describe "fetching messages" do
     
     before(:all) do
@@ -72,8 +82,8 @@ describe WaseEndpoint::Twitterer do
     @auth_mock ||= mock(Twitter::HTTPAuth)
   end
   
-  def mock_twitter_base
-    @base_mock ||= mock(Twitter::Base)
+  def mock_twitter_base(stubs = {:help => true})
+    @base_mock ||= mock(Twitter::Base, stubs)
   end
   
   def mock_mash(message_id)

@@ -1,0 +1,53 @@
+= WaseEndpoint
+
+WaseEndpoint is a library for building daemons that act as WASE Endpoints for the EngineYard Wase competition: http://bit.ly/3qRMbv
+
+== Install
+  
+WaseEndpoint is hosted by http://gemcutter.com. Please make sure you have added them to your gem sources.
+
+  $ sudo gem install WaseEndpoint
+
+== Usage
+
+The following are all in the example directory.
+
+Your endpoint logic:
+
+  # example/my_endpoint.rb
+  
+  require 'rubygems'
+  require 'wase_endpoint'
+
+  class MyEndpoint < WaseEndpoint
+
+    # Just return our json as it came in.
+    def secret_sauce(raw_json)
+      raw_json
+    end
+
+  end
+  
+The init file:
+  
+  # example/init.rb
+
+  require 'my_endpoint'
+
+  MyEndpoint.new( :username => 'twitter_username',
+                  :password => 'twitter_password',
+                  :logfile => 'my_endpoint.log',
+                  :sleep_period => 60 )
+
+That's it! I also included a basic sinatra server in 'server.rb' that can be used as an input/output/program-listing node.
+
+== Problems, Comments, Suggestions?
+
+Issues can be tracked on github: 
+
+All of the above are most welcome. mailto:dougal.s@gmail.com
+
+
+== Credits
+
+Douglas F Shearer - http://douglasfshearer.com

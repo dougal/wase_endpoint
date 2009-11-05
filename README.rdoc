@@ -39,6 +39,10 @@ The init file:
                   :logfile => 'my_endpoint.log',
                   :sleep_period => 60 )
 
+Now running the init file will start your daemon. The PID will be returned to allow you to monitor it or kill it later.
+
+  ruby init.rb
+
 That's it! I also included a basic sinatra server in 'server.rb' that can be used as an input/output/program-listing node.
 
 == Problems, Comments, Suggestions?

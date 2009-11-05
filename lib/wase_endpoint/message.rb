@@ -14,6 +14,7 @@ class WaseEndpoint
       @output_uri = output_uri.strip
       @input_uri = input_uri.strip if input_uri
       @input_uri_1 = input_uri_1.strip if input_uri_1
+      @increment = 1
     end
     
     def ==(other)
@@ -28,7 +29,17 @@ class WaseEndpoint
       RestClient.get('http://' + @output_uri)
     end
     
+    # Accepts either a String of raw data, or a Hash of data and a program
+    # counter increment.
+    # An Exception will be thrown if this increment is negative.
     def send_input(input)
+      
+      if input.is_a?(Hash)
+        @increment = input[:increment]
+        raise ArgumentError, 'You cannot have negative program counter increments' if @increment < 0
+        input = input[:data]
+      end
+      
       input_uri = 'http://' + (@input_uri || @output_uri)
       
       # RestClient can't follow a redirect for put, so we'll expand it.
@@ -36,6 +47,10 @@ class WaseEndpoint
       expanded_input_uri = Net::HTTP.new('bit.ly').head($1)['Location']
       
       RestClient.put(expanded_input_uri, input)
+    end
+    
+    def new_program_counter
+      @program_counter + @increment
     end
     
   end

@@ -50,15 +50,45 @@ describe WaseEndpoint::Message do
       @message.fetch_output.should == '[58, 92, 12, 18, 76]'
     end
     
-    it "should send the input data using the expanded output URI" do
-      mock_net_http = mock(Net::HTTP)
-      mock_net_http.should_receive(:head).with('/2uhGcl').and_return({'Location' => 'http://example.com/'})
-      Net::HTTP.should_receive(:new).with('bit.ly').and_return(mock_net_http)
-      RestClient.should_receive(:put).with('http://example.com/', '[1, 2, 3, 4]')
+    describe "sending input data" do
       
-      @message.send_input('[1, 2, 3, 4]')
+      it "should send the input data using the expanded output URI" do
+        mock_net_http = mock(Net::HTTP)
+        mock_net_http.should_receive(:head).with('/2uhGcl').and_return({'Location' => 'http://example.com/'})
+        Net::HTTP.should_receive(:new).with('bit.ly').and_return(mock_net_http)
+        RestClient.should_receive(:put).with('http://example.com/', '[1, 2, 3, 4]')
+
+        @message.send_input('[1, 2, 3, 4]')
+      end
+      
+      it "should throw an error on negative program counter increment" do
+        Net::HTTP.stub(:new).and_return(mock(Net::HTTP, :head => 'http://example.com'))
+        RestClient.stub(:put)
+        
+        lambda {
+          @message.send_input({:data => 'foo', :increment => -1})
+        }.should raise_error(ArgumentError, 'You cannot have negative program counter increments')
+      end
+      
     end
-    
+
+      
+    describe "incrementing the program counter" do
+      
+      it "should be one" do
+        @message.new_program_counter.should == 1
+      end
+      
+      it "should should be two" do
+        Net::HTTP.stub(:new).and_return(mock(Net::HTTP, :head => 'http://example.com'))
+        RestClient.stub(:put)
+        @message.send_input({:data => 'foo', :increment => 2})
+        
+        @message.new_program_counter.should == 2
+      end
+      
+    end
+      
   end
   
   describe "with one input URI" do
@@ -76,7 +106,7 @@ describe WaseEndpoint::Message do
       @message.input_uri_1.should be_nil
     end
 
-    it "should send the input data using the expanded output URI" do
+    it "should send the input data using the expanded input URI" do
       mock_net_http = mock(Net::HTTP)
       mock_net_http.should_receive(:head).with('/3kl0xs').and_return({'Location' => 'http://example.com/'})
       Net::HTTP.should_receive(:new).with('bit.ly').and_return(mock_net_http)

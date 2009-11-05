@@ -42,14 +42,14 @@ class WaseEndpoint
         messages.each do |message|
           program_listing = message.fetch_program_listing
           if message.program_counter >= program_listing.size
-            throw Exception 'Program counter has gone too far'
+            raise IndexError, 'Program counter has gone too far'
           end
           
           # Here's where your magic happens.
           message.send_input(secret_sauce(message.fetch_output))
           
           # Tell the next endpoint.
-          @twitterer.send(program_listing[message.program_counter + 1], message.program_counter + 1, message.program_listing_uri, message.output_uri)
+          @twitterer.send(program_listing[message.new_program_counter], message.new_program_counter, message.program_listing_uri, message.output_uri)
         end
         
       end

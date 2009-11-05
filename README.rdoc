@@ -6,7 +6,7 @@ WaseEndpoint is a library for building daemons that act as WASE Endpoints for th
   
 WaseEndpoint is hosted by http://gemcutter.com. Please make sure you have added them to your gem sources.
 
-  $ sudo gem install WaseEndpoint
+  $ sudo gem install wase_endpoint
 
 == Usage
 
@@ -47,7 +47,7 @@ That's it! I also included a basic sinatra server in 'server.rb' that can be use
 
 == Problems, Comments, Suggestions?
 
-Issues can be tracked on github: http://github.com/dougal/WaseEndpoint/issues
+Issues can be tracked on github: http://github.com/dougal/wase_endpoint/issues
 
 All of the above are most welcome. mailto:dougal.s@gmail.com
 
